@@ -1,0 +1,98 @@
+@font-face {
+	font-family: 'BYekan';
+	src: url('fonts/BYekan.eot?#') format('eot'),
+	url('fonts/BYekan.ttf') format('truetype'),
+	url('fonts/BYekan.woff') format('woff');
+}
+body{
+	font-family: 'BYekan';
+	text-align: center;
+}
+.test-td{
+	text-align: center;
+	border-radius: 4px;
+	width: 15px;
+	height: 12px;
+	margin: 5px auto;
+font-size: 7px;
+	border: 1px solid #222;
+}
+.test-td-m{
+	text-align: center;
+	border-radius: 4px;
+	width: 10px;
+	margin: auto;
+	height: 10px;
+	border: 1px solid #222;
+}
+.table.tableStatic td{
+	border-top : 0 !important;
+}
+.true{
+	background-color: #00E676;
+}
+.false{
+	background-color: #ff5252;
+}
+.blank{
+	background-color: #999;
+}
+.title-box{
+	text-align: right;
+}
+.box-tit{
+	padding:10px 0 10px 0;
+	font-size: 18px;
+}
+.centered{
+	float: none;
+	margin: 0 auto;
+}
+.head-title{
+	font-size: 16px;
+}
+.marTop-10{
+	margin-top: 10px;
+}
+.marTop-20{
+	margin-top: 20px;
+}
+.title-top{
+	
+}
+.table-condensed>tbody>tr>td, .table-condensed>tbody>tr>th, .table-condensed>tfoot>tr>td, .table-condensed>tfoot>tr>th, .table-condensed>thead>tr>td, .table-condensed>thead>tr>th{
+	border : 1.5px solid #222;
+	padding: 0;
+}
+.table{
+	margin-bottom: 0;
+}
+
+.pdf{
+	width: 100%;
+}
+
+.tabler , .tabler-statistics , .tabler-header , .tabler-header2 , .tabler-chart , .tabler-w{
+	width: 100%;
+	direction: rtl;
+	text-align: right;
+	text-align: center;
+}
+
+.tabler-border{
+	width: 100%;
+	direction: rtl;
+	text-align: right;
+	text-align: center;
+	border : 1px solid #f2f2f2;
+}
+
+.font-head{
+	font-size: 18px;
+}
+.font-workR{
+	font-size: 8px;
+}
+.tabler td{
+	border: 1px solid #f2f2f2;
+}

@@ -1,0 +1,29 @@
+{
+  "framework": "ext",
+  "toolkit": "modern",
+  "requires": [
+    "treegrid",
+    "renderercell",
+    "exporter",
+    "ux"
+  ],
+  "overrides": [
+    "overrides",
+    "jsdom-environment.js"
+  ],
+  "packages": {
+    "dir": [
+      "../../node_modules/@sencha",
+      "../../modern/packages",
+      "c:\\app\\admin\\1film\\theme"
+    ]
+  },
+  "output": {
+    "base": ".",
+    "resources": {
+      "path": "./resources",
+      "shared": "./resources"
+    }
+  },
+  "theme": "1film"
+}

@@ -1,0 +1,58 @@
+@minimized;
+@charset "utf-8";
+/*@import "_setup/_setup.css";
+<auto:info>
+	CSS Document gameplayer atuomaticaly renderd by @sitenevis.com - all rights reserved.
+	imagesPath: gameplayer_images/ 
+</auto:info>*/
+body {
+	padding: 0px;
+	margin: 0px;
+	-webkit-perspective: 1100px;
+	perspective: 1100px;
+	background-color: #000;
+	overflow: hidden;
+}
+#poster{
+	text-align:center;
+	margin-top:450px
+}
+.scaler {
+	width: 1707px;
+	height: 960px;
+	border: none;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background: url(img/poster.jpg);
+	background-size: 100%;
+	-webkit-transform-origin: 0 0 0;
+	transform-origin: 0 0 0;
+}
+.softW{
+		color: #fff;
+		font-size: 50px;
+		background: rgba(0 ,0 ,0 , 0.5);
+		padding: 40px;
+		border-radius: 25px;
+		cursor: pointer;
+	}
+.cover {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 1707px;
+	height: 960px;
+	z-index: 10000;
+	background-color: #000000;
+}
+#messager {
+	font-size: 30px;
+	background: rgba(0,0,0,0.5);
+	color: #fff;
+	padding: 20px;
+	height: 70px;
+	z-index: 1002;
+	text-align: center;
+	margin-top: 300px !important;
+}

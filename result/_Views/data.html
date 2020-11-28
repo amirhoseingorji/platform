@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>مدیریت اطلاعات</title>
+	 <link rel="stylesheet" href="Libraries/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="_Libraries/easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="_Libraries/easyui/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="_Libraries/easyui/easyui-rtl.css">  
+	
+	<script type="text/javascript" src="_Libraries/jquery.js"></script>
+	<script type="text/javascript" src="_Libraries/easyui.js"></script>
+	<script type="text/javascript" src="_Libraries/easyui/treegrid-dnd.js"></script>
+	<script type="text/javascript" src="_Libraries/easyui/easyui-rtl.js"></script>  
+	
+</head>
+<body dir="rtl" style="margin: 0">
+<!--				pagination: true,
+				pageSize: 2,
+				pageList: [2,5,10],
+				-->
+	<table id="tg" class="easyui-treegrid easyui-resizable" title="جدول اطلاعات" 
+			data-options="
+				iconCls: 'icon-large-chart',
+				rownumbers: true,
+				animate: true,
+				collapsible: true,
+				fitColumns: true,
+				url: 'treegrid_data2.json',
+				method: 'post',
+				idField: 'id',
+				treeField: 'name',
+				onContextMenu: onContextMenu,
+				onLoadSuccess: function(row){
+					$(this).treegrid('enableDnd', row?row.id:null);
+				}
+				
+			">
+			<!--//	pagination: true,
+				//pageSize: 2,
+				//pageList: [2,5,10],
+				-->
+		<thead frozen="true">
+			<tr>
+				<th data-options="field:'name',editor:'text',sortable:true">Task Name</th>
+				<th data-options="field:'persons',align:'right',editor:'numberbox',sortable:true">Persons</th>
+				<th data-options="field:'begin',editor:'datebox',sortable:true">Begin Date</th>
+				<th data-options="field:'end',editor:'datebox',sortable:true">End Date</th>
+				<th data-options="field:'progress',width:120,formatter:formatProgress,editor:'numberbox',sortable:true">Progress</th>
+			</tr>
+		</thead>
+	</table>
+		<div id="mm" class="easyui-menu" style="width:120px;">
+		<div onclick="edit()" data-options="iconCls:'icon-edit'">Edit</div>
+		<div class="menu-sep"></div>
+		<div onclick="append()" data-options="iconCls:'icon-add'">Append</div>
+		<div onclick="removeIt()" data-options="iconCls:'icon-remove'">Remove</div>
+		<div class="menu-sep"></div>
+		<div onclick="collapse()">Collapse</div>
+		<div onclick="expand()">Expand</div>
+		<div class="menu-sep"></div>
+		<div onclick="cut()" data-options="iconCls:'icon-copy'">cut</div>
+		<div onclick="copy()" data-options="iconCls:'icon-copy'">copy</div>
+		<div onclick="paste()" data-options="iconCls:'icon-copy'">paste</div>
+	</div>
+	<script type="text/javascript">
+
+	/*	(function($){
+		
+			function pagerFilter(data){
+		        if ($.isArray(data)){    // is array  
+		            data = {  
+		                total: data.length,  
+		                rows: data  
+		            }  
+		        }
+		        var target = this;
+		        var tg = $(target);  
+				var state = tg.data('treegrid');
+		        var opts = tg.treegrid('options');  
+		        if (!state.allRows){
+		        	state.allRows = data.rows;
+		        }
+				if (!opts.remoteSort && opts.sortName){
+					var names = opts.sortName.split(',');
+					var orders = opts.sortOrder.split(',');
+					state.allRows.sort(function(r1,r2){
+						var r = 0;
+						for(var i=0; i<names.length; i++){
+							var sn = names[i];
+							var so = orders[i];
+							var col = $(target).treegrid('getColumnOption', sn);
+							var sortFunc = col.sorter || function(a,b){
+								return a==b ? 0 : (a>b?1:-1);
+							};
+							r = sortFunc(r1[sn], r2[sn]) * (so=='asc'?1:-1);
+							if (r != 0){
+								return r;
+							}
+						}
+						return r;
+					});
+				}
+		        var topRows = [];
+		        var childRows = [];
+		        $.map(state.allRows, function(row){
+		        	row._parentId ? childRows.push(row) : topRows.push(row);
+		        	row.children = null;
+		        });
+		        data.total = topRows.length;
+		        var pager = tg.treegrid('getPager');
+		        pager.pagination('refresh', {
+		        	total: data.total,
+		        	pageNumber: opts.pageNumber
+		        });
+		        opts.pageNumber = pager.pagination('options').pageNumber || 1;
+		        var start = (opts.pageNumber-1)*parseInt(opts.pageSize);  
+		        var end = start + parseInt(opts.pageSize);  
+				data.rows = topRows.slice(start, end).concat(childRows);
+				return data;
+			}
+
+			var appendMethod = $.fn.treegrid.methods.append;
+			var removeMethod = $.fn.treegrid.methods.remove;
+			var loadDataMethod = $.fn.treegrid.methods.loadData;
+			$.extend($.fn.treegrid.methods, {
+				clientPaging: function(jq){
+					return jq.each(function(){
+						var tg = $(this);
+						var state = tg.data('treegrid');
+						var opts = state.options;
+						opts.loadFilter = pagerFilter;
+						var onBeforeLoad = opts.onBeforeLoad;
+						opts.onBeforeLoad = function(row,param){
+							state.allRows = null;
+							return onBeforeLoad.call(this, row, param);
+						}
+						var pager = tg.treegrid('getPager');
+						pager.pagination({
+							onSelectPage:function(pageNum, pageSize){
+								opts.pageNumber = pageNum;
+								opts.pageSize = pageSize;
+								pager.pagination('refresh',{
+									pageNumber:pageNum,
+									pageSize:pageSize
+								});
+								tg.treegrid('loadData',state.allRows);
+							}
+						});
+						tg.treegrid('loadData', state.data);
+						if (opts.url){
+							tg.treegrid('reload');
+						}
+					});
+				},
+				loadData: function(jq, data){
+					jq.each(function(){
+						$(this).data('treegrid').allRows = null;
+					});
+					return loadDataMethod.call($.fn.treegrid.methods, jq, data);
+				},
+				append: function(jq, param){
+					return jq.each(function(){
+						var state = $(this).data('treegrid');
+						if (state.options.loadFilter == pagerFilter){
+							$.map(param.data, function(row){
+								row._parentId = row._parentId || param.parent;
+								state.allRows.push(row);
+							});
+							$(this).treegrid('loadData', state.allRows);
+						} else {
+							appendMethod.call($.fn.treegrid.methods, $(this), param);
+						}
+					})
+				},
+				remove: function(jq, id){
+					return jq.each(function(){
+						if ($(this).treegrid('find', id)){
+							removeMethod.call($.fn.treegrid.methods, $(this), id);
+						}
+						var state = $(this).data('treegrid');
+						if (state.options.loadFilter == pagerFilter){
+							for(var i=0; i<state.allRows.length; i++){
+								if (state.allRows[i][state.options.idField] == id){
+									state.allRows.splice(i,1);
+									break;
+								}
+							}
+							$(this).treegrid('loadData', state.allRows);
+						}
+					})
+				},
+				getAllRows: function(jq){
+					return jq.data('treegrid').allRows;
+				}
+			});
+$('#tg').treegrid().treegrid('clientPaging');
+		})(jQuery);*/
+		function formatProgress(value){
+	    	if (value){
+		    	var s = '<div style="width:100%;border:1px solid #ccc">' +
+		    			'<div style="width:' + value + '%;background:#cc0000;color:#fff">' + value + '%' + '</div>'
+		    			'</div>';
+		    	return s;
+	    	} else {
+		    	return '';
+	    	}
+		}
+		var editingId;
+		var clipboard;
+		var cuted;
+		function cut(){
+			var node = $('#tg').treegrid('getSelected');
+			clipboard = node;
+			cuted = true;
+		}
+		function copy(){
+			var node = $('#tg').treegrid('getSelected');
+			clipboard = node;
+			cuted = false;
+		}
+		function paste(){
+			if(clipboard){
+				var new_id = new_id || '';
+				var orig_new_id = new_id;
+				var rx = /"id":(\d+)/g;
+				var rx2 = /"_parentId":(\d+)/g;
+				var node = clipboard
+				
+				var node_json = JSON.stringify(node);
+				node_json2 = node_json.replace(rx,function(){new_id = new_id+' '; return "\"id\":"+"\""+new_id+"\"";});
+				new_id = orig_new_id;
+				node_json2 = node_json2.replace(rx2,function(){new_id = new_id+' '; return "\"_parentId\":"+"\""+new_id+"\"";});
+				node = JSON.parse(node_json2);
+				
+				node._parentId = $('#tg').treegrid('getSelected').id
+				$('#tg').treegrid('append',{'data':[node]});
+			}
+			if(cuted){
+				removeIt(clipboard);
+				cuted = false;
+				clipboard = undefined;
+			}
+		}
+		function edit(){
+			if (editingId != undefined){
+				$('#tg').treegrid('select', editingId);
+				return;
+			}
+			var row = $('#tg').treegrid('getSelected');
+			if (row){
+				editingId = row.id
+				
+				$('#tg').treegrid('beginEdit', editingId);
+				cancle = $("<span>",{onclick:"cancel()","class":"editkey menu-icon icon-cancel"}).css({
+					float:"right",position:"relative","padding-right":"10px"
+				});
+				ok = $("<span>",{onclick:"save()","class":"editkey menu-icon icon-ok"}).css({
+					float:"right",position:"relative","padding-right":"5px"
+				})
+				
+				$('.panel-tool').prepend(cancle).prepend(ok);
+				$(".datagrid-editable-input,.textbox-text,validatebox-text").keypress(function(e){
+					console.log(e.which)
+					if ( e.which == 13 ) {save()}else if(e.which == 27) {cancel();} 
+				})
+			}
+		}
+		function save(){
+			$(".editkey").remove()
+			if (editingId != undefined){
+				var t = $('#tg');
+				t.treegrid('endEdit', editingId);
+				editingId = undefined;
+				var persons = 0;
+				var rows = t.treegrid('getChildren');
+				for(var i=0; i<rows.length; i++){
+					var p = parseInt(rows[i].persons);
+					if (!isNaN(p)){
+						persons += p;
+					}
+				}
+				var frow = t.treegrid('getFooterRows')[0];
+				frow.persons = persons;
+				t.treegrid('reloadFooter');
+			}
+		}
+		function cancel(){
+			$(".editkey").remove()
+			if (editingId != undefined){
+				$('#tg').treegrid('cancelEdit', editingId);
+				editingId = undefined;
+			}
+		}
+		function onContextMenu(e,row){
+			if (row && editingId == undefined){
+				e.preventDefault();
+				$(this).treegrid('select', row.id);
+				$('#mm').menu('show',{
+					left: e.pageX,
+					top: e.pageY
+				});				
+			}
+		}
+		var idIndex = 100;
+		function append(){
+			idIndex++;
+			var d1 = new Date();
+			var d2 = new Date();
+			d2.setMonth(d2.getMonth()+1);
+			var node = $('#tg').treegrid('getSelected');
+			$('#tg').treegrid('append',{
+				parent: node.id,
+				data: [{
+					id: idIndex,
+					name: 'New Task'+idIndex,
+					persons: parseInt(Math.random()*10),
+					begin: $.fn.datebox.defaults.formatter(d1),
+					end: $.fn.datebox.defaults.formatter(d2),
+					progress: parseInt(Math.random()*100)
+				}]
+			})
+		}
+		function removeIt(node){
+			
+			var node = node || $('#tg').treegrid('getSelected');
+			if (node){
+				$('#tg').treegrid('remove', node.id);
+			}
+		}
+		function collapse(){
+			var node = $('#tg').treegrid('getSelected');
+			if (node){
+				$('#tg').treegrid('collapse', node.id);
+			}
+		}
+		function expand(){
+			var node = $('#tg').treegrid('getSelected');
+			if (node){
+				$('#tg').treegrid('expand', node.id);
+			}
+		}
+	</script>
+
+</body>
+</html>

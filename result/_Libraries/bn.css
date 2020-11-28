@@ -1,0 +1,57 @@
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('fonts/fontawesome-webfont.eot?v=4.7.0');
+    src: url('fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
+@font-face {
+	background-size:cover;
+    font-family: 'BYekan';
+    src: url('fonts/BYekan.eot?#') format('eot'),
+    url('fonts/BYekan.ttf') format('truetype'),
+    url('fonts/BYekan.woff') format('woff');
+}
+
+body{
+	font-family: 'BYekan' , 'FontAwesome';
+	overflow:hidden;
+	padding:0px;
+	margin:0px;
+	background-size:cover;
+	background: #fff;
+}
+
+.form-file{
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	margin-top: 50px;
+	margin-bottom: 50px;
+	min-height: 300px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+.centered{
+	float: none !important;
+	margin: 0 auto !important;
+}
+.form-c{
+	margin-top: 15px;
+}
+.w100d { 
+	width: 100%;
+}
+.lightBox{
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.6);
+	position: fixed;
+	min-height: 500px;
+	z-index: 10;
+	top: 0;
+	left: 0;
+	display: none;
+}

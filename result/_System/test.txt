@@ -1,0 +1,1 @@
+*/45 * * * * /usr/bin/curl -s "http://andishmand.net/_System/test.php?id=1223&sd=34"
